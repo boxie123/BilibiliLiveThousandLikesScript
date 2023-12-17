@@ -1,4 +1,4 @@
-# autolike
+# BilibiliLiveThousandLikesScript
 b站直播间点赞*1000
 
 ## 安装方法
