@@ -14,16 +14,30 @@
 
 (function() {
     'use strict';
-    ah.proxy({
-        onRequest: (config, handler) => {
-            //console.log(config)
-            if (config.url.includes('/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3')) {
-                config.body = config.body.replace(/click_time=[0-9]+/,'click_time=1000')
-                handler.next(config);
-            }
-            else{
-                handler.next(config);
-            }
-        },
-    },unsafeWindow);
+
+    // 拦截XHR请求
+    // ah.proxy({
+    //     onRequest: (config, handler) => {
+    //         if (config.url.includes('/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3')) {
+    //             config.body = config.body.replace(/click_time=[0-9]+/,'click_time=1000');
+    //             console.log('[B站点赞脚本] 拦截到XHR请求:', config);
+    //         }
+    //         handler.next(config);
+    //     },
+    // }, unsafeWindow);
+
+    // 拦截Fetch请求
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        const [resource, config] = args;
+
+        // 检查是否是点赞请求
+        if (typeof resource === 'string' && resource.includes('/xlive/app-ucenter/v1/like_info_v3/like/likeReportV3')) {
+            console.log('[B站点赞脚本] 拦截到Fetch请求:', {resource, config});
+            const newResource = resource.replace(/click_time=[0-9]+/,'click_time=1000');
+            args[0] = newResource
+        }
+
+        return originalFetch.apply(this, args);
+    };
 })();
