@@ -2,7 +2,7 @@
 // @name         b站直播间点赞*1000
 // @namespace    https://space.bilibili.com/35192025
 // @supportURL   https://space.bilibili.com/35192025
-// @version      1.1.0
+// @version      1.1.1
 // @description  不管点赞多少次都会变成1k次
 // @author       铂屑
 // @license      MIT
@@ -27,8 +27,8 @@
     // }, unsafeWindow);
 
     // 拦截Fetch请求
-    const originalFetch = window.fetch;
-    window.fetch = async function(...args) {
+    const originalFetch = unsafeWindow.fetch;
+    unsafeWindow.fetch = async function(...args) {
         const [resource, config] = args;
 
         // 检查是否是点赞请求
